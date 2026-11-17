@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GTA VI Countdown | Launch Timer by Country</title>
+<meta name="description" content="Live countdown to the GTA VI launch on November 19, 2026. PS5 timer for your region plus unlock timers for 19 countries.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --pink:#ff3d9a; --orange:#ff9a3c; --purple:#7b2ff7; --teal:#19e3c8;
+    --bg:#0c0618; --card:rgba(255,255,255,.06); --line:rgba(255,255,255,.12);
+    --text:#fff; --muted:#c9bfe0;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:Inter,system-ui,sans-serif;color:var(--text);min-height:100vh;
+    background:
+      radial-gradient(1200px 600px at 50% -10%, rgba(255,61,154,.45), transparent 60%),
+      radial-gradient(900px 500px at 100% 20%, rgba(123,47,247,.35), transparent 60%),
+      radial-gradient(800px 500px at 0% 40%, rgba(255,154,60,.25), transparent 60%),
+      var(--bg);
+    background-attachment:fixed;
+  }
+  .wrap{max-width:1180px;margin:0 auto;padding:40px 20px 60px}
+  header{text-align:center;margin-bottom:28px}
+  .eyebrow{letter-spacing:.35em;font-size:.8rem;color:var(--muted);text-transform:uppercase}
+  h1{
+    font-family:Anton,Impact,sans-serif;font-size:clamp(3rem,10vw,6.5rem);line-height:1;margin:10px 0 6px;
+    background:linear-gradient(90deg,var(--orange),var(--pink) 50%,var(--purple));
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+    filter:drop-shadow(0 6px 30px rgba(255,61,154,.35));
+  }
+  .date{font-weight:600;color:var(--muted)}
+
+  /* Hero (PS5) */
+  .hero{
+    border:1px solid var(--line);border-radius:24px;padding:28px 20px;text-align:center;
+    background:linear-gradient(160deg,rgba(0,112,209,.35),rgba(123,47,247,.18) 60%,rgba(255,255,255,.04));
+    backdrop-filter:blur(8px);box-shadow:0 20px 60px rgba(0,0,0,.4);margin-bottom:40px;
+  }
+  .badge{display:inline-block;padding:6px 14px;border-radius:999px;font-weight:800;font-size:.8rem;letter-spacing:.12em}
+  .badge.ps{background:#0070d1}
+  .badge.xb{background:#107c10}
+  .hero h2{font-size:1.1rem;margin:14px 0 4px;font-weight:600}
+  .hero .sub{color:var(--muted);font-size:.9rem;margin-bottom:18px}
+  .big{display:flex;justify-content:center;gap:clamp(8px,2vw,18px);flex-wrap:wrap}
+  .unit{min-width:clamp(70px,16vw,140px);padding:14px 8px;border-radius:16px;background:rgba(0,0,0,.35);border:1px solid var(--line)}
+  .unit .n{font-family:"JetBrains Mono",monospace;font-size:clamp(2.2rem,7vw,4.5rem);line-height:1}
+  .unit .l{font-size:.75rem;letter-spacing:.2em;color:var(--muted);margin-top:6px;text-transform:uppercase}
+  .hero .live{font-family:Anton,sans-serif;font-size:clamp(2.5rem,8vw,5rem);color:var(--teal);text-shadow:0 0 30px rgba(25,227,200,.6)}
+  .first{margin-top:16px;font-size:.9rem;color:var(--muted)}
+  .first b{color:#fff}
+
+  /* Grid */
+  .section-head{display:flex;align-items:center;gap:12px;margin-bottom:6px;flex-wrap:wrap}
+  .section-head h3{font-family:Anton,sans-serif;font-size:2rem;letter-spacing:.02em}
+  .note{color:var(--muted);font-size:.88rem;margin-bottom:18px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
+  .card{
+    position:relative;border:1px solid var(--line);border-radius:18px;padding:16px;background:var(--card);
+    transition:transform .2s,border-color .2s;
+  }
+  .card:hover{transform:translateY(-3px);border-color:rgba(255,255,255,.3)}
+  .card.next{border-color:var(--pink);box-shadow:0 0 0 1px var(--pink),0 0 30px rgba(255,61,154,.35)}
+  .card.next::after{content:"NEXT";position:absolute;top:12px;right:12px;font-size:.65rem;font-weight:800;letter-spacing:.15em;background:var(--pink);padding:3px 8px;border-radius:999px}
+  .card.done{border-color:var(--teal);background:rgba(25,227,200,.08)}
+  .country{display:flex;align-items:center;gap:10px;font-weight:800;font-size:1.1rem}
+  .flag{font-size:1.6rem}
+  .times{font-size:.78rem;color:var(--muted);margin:6px 0 12px;line-height:1.5}
+  .cd{font-family:"JetBrains Mono",monospace;font-size:1.7rem;letter-spacing:.02em}
+  .cd small{font-size:.7rem;color:var(--muted);margin:0 6px 0 1px}
+  .unlocked{font-family:Anton,sans-serif;font-size:1.6rem;color:var(--teal)}
+  .bar{height:4px;border-radius:4px;background:rgba(255,255,255,.1);margin-top:12px;overflow:hidden}
+  .bar i{display:block;height:100%;background:linear-gradient(90deg,var(--orange),var(--pink));width:0}
+
+  footer{margin-top:40px;text-align:center;color:var(--muted);font-size:.78rem;line-height:1.6}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Welcome back to Leonida</div>
+    <h1>GTA VI COUNTDOWN</h1>
+    <div class="date">Launching Thursday, November 19, 2026</div>
+  </header>
+
+  <!-- PlayStation hero timer -->
+  <section class="hero">
+    <span class="badge ps">PLAYSTATION 5</span>
+    <h2>Time left in your region</h2>
+    <div class="sub" id="psSub">Midnight, November 19 in your time zone</div>
+    <div id="psTimer" class="big"></div>
+    <div class="first" id="firstLine"></div>
+  </section>
+
+  <!-- Xbox country timers -->
+  <section>
+    <div class="section-head">
+      <span class="badge xb">XBOX SERIES X|S</span>
+      <h3>Unlock by Country</h3>
+    </div>
+    <p class="note">The game unlocks at local midnight country by country, starting in New Zealand. Times below are also shown in your local time.</p>
+    <div class="grid" id="grid"></div>
+  </section>
+
+  <footer>
+    Fan made countdown. Not affiliated with Rockstar Games, Sony or Microsoft.<br>
+    Unlock times follow the midnight local time rollout reported from store listings and may change.
+  </footer>
+</div>
+
+<script>
+// Unlock moments in UTC (midnight local on Nov 19, 2026 in each market)
+const COUNTRIES = [
+  { name:"New Zealand",   flag:"🇳🇿", tz:"Pacific/Auckland",   utc:"2026-11-18T11:00:00Z" },
+  { name:"Australia",     flag:"🇦🇺", tz:"Australia/Sydney",   utc:"2026-11-18T13:00:00Z" },
+  { name:"Japan",         flag:"🇯🇵", tz:"Asia/Tokyo",         utc:"2026-11-18T15:00:00Z" },
+  { name:"South Korea",   flag:"🇰🇷", tz:"Asia/Seoul",         utc:"2026-11-18T15:00:00Z" },
+  { name:"Singapore",     flag:"🇸🇬", tz:"Asia/Singapore",     utc:"2026-11-18T16:00:00Z" },
+  { name:"Hong Kong",     flag:"🇭🇰", tz:"Asia/Hong_Kong",     utc:"2026-11-18T16:00:00Z" },
+  { name:"India",         flag:"🇮🇳", tz:"Asia/Kolkata",       utc:"2026-11-18T18:30:00Z" },
+  { name:"UAE",           flag:"🇦🇪", tz:"Asia/Dubai",         utc:"2026-11-18T20:00:00Z" },
+  { name:"Saudi Arabia",  flag:"🇸🇦", tz:"Asia/Riyadh",        utc:"2026-11-18T21:00:00Z" },
+  { name:"South Africa",  flag:"🇿🇦", tz:"Africa/Johannesburg",utc:"2026-11-18T22:00:00Z" },
+  { name:"Germany",       flag:"🇩🇪", tz:"Europe/Berlin",      utc:"2026-11-18T23:00:00Z" },
+  { name:"France",        flag:"🇫🇷", tz:"Europe/Paris",       utc:"2026-11-18T23:00:00Z" },
+  { name:"Italy",         flag:"🇮🇹", tz:"Europe/Rome",        utc:"2026-11-18T23:00:00Z" },
+  { name:"Spain",         flag:"🇪🇸", tz:"Europe/Madrid",      utc:"2026-11-18T23:00:00Z" },
+  { name:"United Kingdom",flag:"🇬🇧", tz:"Europe/London",      utc:"2026-11-19T00:00:00Z" },
+  { name:"Brazil",        flag:"🇧🇷", tz:"America/Sao_Paulo",  utc:"2026-11-19T03:00:00Z" },
+  { name:"Canada",        flag:"🇨🇦", tz:"America/Toronto",    utc:"2026-11-19T05:00:00Z" },
+  { name:"United States", flag:"🇺🇸", tz:"America/New_York",   utc:"2026-11-19T05:00:00Z" },
+  { name:"Mexico",        flag:"🇲🇽", tz:"America/Mexico_City",utc:"2026-11-19T06:00:00Z" },
+].map(c => ({...c, t: new Date(c.utc).getTime()}));
+
+const userTz = Intl.DateTimeFormat().resolvedOptions().timeZone || "your time zone";
+// PS5 target: midnight Nov 19 in the visitor's own time zone
+const psTarget = new Date(2026, 10, 19, 0, 0, 0).getTime();
+const START = new Date("2026-11-01T00:00:00Z").getTime(); // progress bar baseline
+
+const pad = n => String(n).padStart(2, "0");
+function split(ms){
+  const s = Math.max(0, Math.floor(ms/1000));
+  return { d:Math.floor(s/86400), h:Math.floor(s%86400/3600), m:Math.floor(s%3600/60), s:s%60 };
+}
+const fmt = (t, tz) => new Intl.DateTimeFormat("en-GB",{
+  timeZone:tz, weekday:"short", day:"numeric", month:"short", hour:"2-digit", minute:"2-digit", hour12:true
+}).format(t);
+
+// Build hero
+document.getElementById("psSub").textContent = `Midnight, November 19 in ${userTz}`;
+const psEl = document.getElementById("psTimer");
+psEl.innerHTML = ["Days","Hours","Minutes","Seconds"].map((l,i)=>
+  `<div class="unit"><div class="n" id="ps${i}">00</div><div class="l">${l}</div></div>`).join("");
+
+// Build grid
+const grid = document.getElementById("grid");
+COUNTRIES.forEach((c,i)=>{
+  const el = document.createElement("div");
+  el.className = "card"; el.id = "c"+i;
+  el.innerHTML = `
+    <div class="country"><span class="flag">${c.flag}</span>${c.name}</div>
+    <div class="times">Local: ${fmt(c.t, c.tz)}<br>Your time: ${fmt(c.t)}</div>
+    <div class="cd" id="cd${i}"></div>
+    <div class="bar"><i id="b${i}"></i></div>`;
+  grid.appendChild(el);
+});
+
+function tick(){
+  const now = Date.now();
+
+  // Hero
+  const left = psTarget - now;
+  if (left <= 0){
+    psEl.innerHTML = `<div class="live">IT'S LIVE. GO PLAY!</div>`;
+  } else {
+    const x = split(left);
+    [x.d,x.h,x.m,x.s].forEach((v,i)=>{ const n=document.getElementById("ps"+i); if(n) n.textContent=pad(v); });
+  }
+
+  // First / next unlock line
+  const next = COUNTRIES.filter(c=>c.t>now).sort((a,b)=>a.t-b.t)[0];
+  const doneCount = COUNTRIES.filter(c=>c.t<=now).length;
+  document.getElementById("firstLine").innerHTML = next
+    ? `Next unlock: <b>${next.flag} ${next.name}</b> at ${fmt(next.t)} your time · ${doneCount}/${COUNTRIES.length} countries live`
+    : `Unlocked in all ${COUNTRIES.length} listed countries 🎉`;
+
+  // Cards
+  COUNTRIES.forEach((c,i)=>{
+    const card = document.getElementById("c"+i), cd = document.getElementById("cd"+i);
+    const ms = c.t - now;
+    card.classList.toggle("next", !!next && c.t === next.t);
+    if (ms <= 0){
+      card.classList.add("done");
+      cd.innerHTML = `<span class="unlocked">UNLOCKED ✓</span>`;
+      document.getElementById("b"+i).style.width = "100%";
+    } else {
+      const x = split(ms);
+      cd.innerHTML = `${x.d}<small>d</small>${pad(x.h)}<small>h</small>${pad(x.m)}<small>m</small>${pad(x.s)}<small>s</small>`;
+      const pct = Math.min(100, Math.max(0, (now-START)/(c.t-START)*100));
+      document.getElementById("b"+i).style.width = pct.toFixed(2)+"%";
+    }
+  });
+}
+tick();
+setInterval(tick, 1000);
+</script>
+</body>
+</html>
