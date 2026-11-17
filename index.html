@@ -24,6 +24,18 @@
       var(--bg);
     background-attachment:fixed;
   }
+  /* Wallpaper layer: put your image in the repo as wallpaper.jpg */
+  body.has-wp::before{
+    content:"";position:fixed;inset:0;z-index:-2;
+    background:url("wallpaper.jpg") center/cover no-repeat;
+  }
+  /* Dark overlay so the timers stay readable over any wallpaper */
+  body.has-wp::after{
+    content:"";position:fixed;inset:0;z-index:-1;
+    background:
+      linear-gradient(180deg,rgba(12,6,24,.55) 0%,rgba(12,6,24,.75) 45%,rgba(12,6,24,.9) 100%),
+      radial-gradient(1200px 600px at 50% -10%, rgba(255,61,154,.30), transparent 60%);
+  }
   .wrap{max-width:1180px;margin:0 auto;padding:40px 20px 60px}
   header{text-align:center;margin-bottom:28px}
   .eyebrow{letter-spacing:.35em;font-size:.8rem;color:var(--muted);text-transform:uppercase}
@@ -68,7 +80,9 @@
   .card.next::after{content:"NEXT";position:absolute;top:12px;right:12px;font-size:.65rem;font-weight:800;letter-spacing:.15em;background:var(--pink);padding:3px 8px;border-radius:999px}
   .card.done{border-color:var(--teal);background:rgba(25,227,200,.08)}
   .country{display:flex;align-items:center;gap:10px;font-weight:800;font-size:1.1rem}
-  .flag{font-size:1.6rem}
+  .flag{width:28px;height:20px;object-fit:cover;border-radius:3px;box-shadow:0 0 0 1px rgba(255,255,255,.25);flex-shrink:0}
+  .flag.sm{width:20px;height:14px;vertical-align:-2px;margin-right:4px}
+
   .times{font-size:.78rem;color:var(--muted);margin:6px 0 12px;line-height:1.5}
   .cd{font-family:"JetBrains Mono",monospace;font-size:1.7rem;letter-spacing:.02em}
   .cd small{font-size:.7rem;color:var(--muted);margin:0 6px 0 1px}
@@ -77,6 +91,10 @@
   .bar i{display:block;height:100%;background:linear-gradient(90deg,var(--orange),var(--pink));width:0}
 
   footer{margin-top:40px;text-align:center;color:var(--muted);font-size:.78rem;line-height:1.6}
+  /* Extra readability only when a wallpaper is present */
+  body.has-wp .card{background:rgba(16,8,32,.62);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+  body.has-wp .hero{background:linear-gradient(160deg,rgba(0,80,160,.55),rgba(40,16,80,.6) 60%,rgba(16,8,32,.65));backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+  body.has-wp .date, body.has-wp .eyebrow, body.has-wp .note{text-shadow:0 1px 8px rgba(0,0,0,.7)}
 </style>
 </head>
 <body>
@@ -113,27 +131,29 @@
 </div>
 
 <script>
+// Turn on wallpaper mode only if wallpaper.jpg exists
+(function(){ const im=new Image(); im.onload=()=>document.body.classList.add("has-wp"); im.src="wallpaper.jpg"; })();
 // Unlock moments in UTC (midnight local on Nov 19, 2026 in each market)
 const COUNTRIES = [
-  { name:"New Zealand",   flag:"🇳🇿", tz:"Pacific/Auckland",   utc:"2026-11-18T11:00:00Z" },
-  { name:"Australia",     flag:"🇦🇺", tz:"Australia/Sydney",   utc:"2026-11-18T13:00:00Z" },
-  { name:"Japan",         flag:"🇯🇵", tz:"Asia/Tokyo",         utc:"2026-11-18T15:00:00Z" },
-  { name:"South Korea",   flag:"🇰🇷", tz:"Asia/Seoul",         utc:"2026-11-18T15:00:00Z" },
-  { name:"Singapore",     flag:"🇸🇬", tz:"Asia/Singapore",     utc:"2026-11-18T16:00:00Z" },
-  { name:"Hong Kong",     flag:"🇭🇰", tz:"Asia/Hong_Kong",     utc:"2026-11-18T16:00:00Z" },
-  { name:"India",         flag:"🇮🇳", tz:"Asia/Kolkata",       utc:"2026-11-18T18:30:00Z" },
-  { name:"UAE",           flag:"🇦🇪", tz:"Asia/Dubai",         utc:"2026-11-18T20:00:00Z" },
-  { name:"Saudi Arabia",  flag:"🇸🇦", tz:"Asia/Riyadh",        utc:"2026-11-18T21:00:00Z" },
-  { name:"South Africa",  flag:"🇿🇦", tz:"Africa/Johannesburg",utc:"2026-11-18T22:00:00Z" },
-  { name:"Germany",       flag:"🇩🇪", tz:"Europe/Berlin",      utc:"2026-11-18T23:00:00Z" },
-  { name:"France",        flag:"🇫🇷", tz:"Europe/Paris",       utc:"2026-11-18T23:00:00Z" },
-  { name:"Italy",         flag:"🇮🇹", tz:"Europe/Rome",        utc:"2026-11-18T23:00:00Z" },
-  { name:"Spain",         flag:"🇪🇸", tz:"Europe/Madrid",      utc:"2026-11-18T23:00:00Z" },
-  { name:"United Kingdom",flag:"🇬🇧", tz:"Europe/London",      utc:"2026-11-19T00:00:00Z" },
-  { name:"Brazil",        flag:"🇧🇷", tz:"America/Sao_Paulo",  utc:"2026-11-19T03:00:00Z" },
-  { name:"Canada",        flag:"🇨🇦", tz:"America/Toronto",    utc:"2026-11-19T05:00:00Z" },
-  { name:"United States", flag:"🇺🇸", tz:"America/New_York",   utc:"2026-11-19T05:00:00Z" },
-  { name:"Mexico",        flag:"🇲🇽", tz:"America/Mexico_City",utc:"2026-11-19T06:00:00Z" },
+  { name:"New Zealand",   flag:"nz", tz:"Pacific/Auckland",   utc:"2026-11-18T11:00:00Z" },
+  { name:"Australia",     flag:"au", tz:"Australia/Sydney",   utc:"2026-11-18T13:00:00Z" },
+  { name:"Japan",         flag:"jp", tz:"Asia/Tokyo",         utc:"2026-11-18T15:00:00Z" },
+  { name:"South Korea",   flag:"kr", tz:"Asia/Seoul",         utc:"2026-11-18T15:00:00Z" },
+  { name:"Singapore",     flag:"sg", tz:"Asia/Singapore",     utc:"2026-11-18T16:00:00Z" },
+  { name:"Hong Kong",     flag:"hk", tz:"Asia/Hong_Kong",     utc:"2026-11-18T16:00:00Z" },
+  { name:"India",         flag:"in", tz:"Asia/Kolkata",       utc:"2026-11-18T18:30:00Z" },
+  { name:"UAE",           flag:"ae", tz:"Asia/Dubai",         utc:"2026-11-18T20:00:00Z" },
+  { name:"Saudi Arabia",  flag:"sa", tz:"Asia/Riyadh",        utc:"2026-11-18T21:00:00Z" },
+  { name:"South Africa",  flag:"za", tz:"Africa/Johannesburg",utc:"2026-11-18T22:00:00Z" },
+  { name:"Germany",       flag:"de", tz:"Europe/Berlin",      utc:"2026-11-18T23:00:00Z" },
+  { name:"France",        flag:"fr", tz:"Europe/Paris",       utc:"2026-11-18T23:00:00Z" },
+  { name:"Italy",         flag:"it", tz:"Europe/Rome",        utc:"2026-11-18T23:00:00Z" },
+  { name:"Spain",         flag:"es", tz:"Europe/Madrid",      utc:"2026-11-18T23:00:00Z" },
+  { name:"United Kingdom",flag:"gb", tz:"Europe/London",      utc:"2026-11-19T00:00:00Z" },
+  { name:"Brazil",        flag:"br", tz:"America/Sao_Paulo",  utc:"2026-11-19T03:00:00Z" },
+  { name:"Canada",        flag:"ca", tz:"America/Toronto",    utc:"2026-11-19T05:00:00Z" },
+  { name:"United States", flag:"us", tz:"America/New_York",   utc:"2026-11-19T05:00:00Z" },
+  { name:"Mexico",        flag:"mx", tz:"America/Mexico_City",utc:"2026-11-19T06:00:00Z" },
 ].map(c => ({...c, t: new Date(c.utc).getTime()}));
 
 const userTz = Intl.DateTimeFormat().resolvedOptions().timeZone || "your time zone";
@@ -162,7 +182,7 @@ COUNTRIES.forEach((c,i)=>{
   const el = document.createElement("div");
   el.className = "card"; el.id = "c"+i;
   el.innerHTML = `
-    <div class="country"><span class="flag">${c.flag}</span>${c.name}</div>
+    <div class="country"><img class="flag" src="https://flagcdn.com/w80/${c.flag}.png" alt="">${c.name}</div>
     <div class="times">Local: ${fmt(c.t, c.tz)}<br>Your time: ${fmt(c.t)}</div>
     <div class="cd" id="cd${i}"></div>
     <div class="bar"><i id="b${i}"></i></div>`;
@@ -185,7 +205,7 @@ function tick(){
   const next = COUNTRIES.filter(c=>c.t>now).sort((a,b)=>a.t-b.t)[0];
   const doneCount = COUNTRIES.filter(c=>c.t<=now).length;
   document.getElementById("firstLine").innerHTML = next
-    ? `Next unlock: <b>${next.flag} ${next.name}</b> at ${fmt(next.t)} your time · ${doneCount}/${COUNTRIES.length} countries live`
+    ? `Next unlock: <b><img class="flag sm" src="https://flagcdn.com/w40/${next.flag}.png" alt="">${next.name}</b> at ${fmt(next.t)} your time · ${doneCount}/${COUNTRIES.length} countries live`
     : `Unlocked in all ${COUNTRIES.length} listed countries 🎉`;
 
   // Cards
