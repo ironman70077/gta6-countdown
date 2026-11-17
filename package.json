@@ -1,0 +1,29 @@
+{
+  "name": "gta6-countdown",
+  "version": "1.0.0",
+  "description": "Live countdown to the GTA VI launch on November 19, 2026",
+  "main": "index.html",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "echo \"No tests configured\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ironman70077/gta6-countdown.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ironman70077/gta6-countdown/issues"
+  },
+  "homepage": "https://github.com/ironman70077/gta6-countdown#readme",
+  "dependencies": {
+    "@vercel/speed-insights": "^2.1.0"
+  },
+  "devDependencies": {
+    "vite": "^8.3.8"
+  }
+}
